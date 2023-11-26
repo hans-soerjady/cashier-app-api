@@ -87,13 +87,22 @@ module.exports = {
             console.log(error);
             next(templateResponse(500, "Error delete account.", error.message))
         }
+    },
+    keepLogin: async (req, res, next) => {
+        try {
+            const result = await accounts.findOne({ where: { id: req.accountData.id } })
+            const { id, username, role } = result;
+            const token = jwt.sign({ id, username, role }, process.env.SCRT_TOKEN)
+            return res.status(200).send({
+                success: true,
+                result: {
+                    username,
+                    token
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            next(templateResponse(error.rc || 500, "Error keep login account", error.message))
+        }
     }
-    // keepLogin: async (req, res, next) => {
-    //     try {
-
-    //     } catch (error) {
-    //         console.log(error);
-    //         next(templateResponse(500, "Error keep login account", error.message))
-    //     }
-    // }
 }

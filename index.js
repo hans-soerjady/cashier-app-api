@@ -15,15 +15,19 @@ app.get("/", (req, res) => {
 
 
 // DEFINE ROUTER DISINI
-const { accountsRouter, categoriesRouter, productsRouter } = require("./routers");
+const { accountsRouter, categoriesRouter, productsRouter, transactionsRouter } = require("./routers");
 app.use("/account", accountsRouter)
 app.use("/category", categoriesRouter)
 app.use("/product", productsRouter)
+app.use("/transaction", transactionsRouter)
 
 // ERROR HANDLING DISINI
 app.use((error, req, res, next) => {
     return res.status(error.rc || 500).send(error)
 })
+
+// BUAT ACCESS PUBLIC FOLDER
+app.use("/public", express.static("public"))
 
 app.listen(PORT, () => {
     console.log("API RUNNING ON PORT", PORT);
